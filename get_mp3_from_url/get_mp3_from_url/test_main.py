@@ -2,7 +2,7 @@
 
 import unittest
 
-from .main import main
+from . main import main
 
 
 class TestMain(unittest.TestCase):

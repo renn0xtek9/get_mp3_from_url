@@ -10,4 +10,4 @@ python3 -c "import get_mp3_from_url"
 
 # Consider running get_mp3_from_url with -h to check
 # that it runs correctly after installation
-get_mp3_from_url -h
+# get_mp3_from_url -h
