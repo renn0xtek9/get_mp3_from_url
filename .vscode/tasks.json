@@ -27,6 +27,6 @@
             "label": "Deploy locally",
             "type": "shell",
             "command": "${workspaceFolder}/scripts/deploy_locally.sh"
-        }
+        },
     ]
 }
