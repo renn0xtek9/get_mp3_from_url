@@ -3,7 +3,7 @@
         {
             "label": "Unit-tests",
             "type": "shell",
-            "command": "coverage run --source=package_foobar -m unittest discover -v -b -s ."
+            "command": "coverage run --source=get_mp3_from_url -m unittest discover -v -b -s ."
         },
         {
             "label": "Code coverage",
@@ -21,7 +21,7 @@
         {
             "label": "Pylint check",
             "type": "shell",
-            "command": "pylint --load-plugins=pylint.extensions.docparams  ${workspaceFolder}/package_foobar/"
+            "command": "pylint --load-plugins=pylint.extensions.docparams  ${workspaceFolder}/get_mp3_from_url/"
         },
         {
             "label": "Deploy locally",

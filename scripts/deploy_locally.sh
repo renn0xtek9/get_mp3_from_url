@@ -2,12 +2,12 @@
 set -euxo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"/..
-pip uninstall -y package_foobar
-pip install -e package_foobar
+pip uninstall -y get_mp3_from_url
+pip install -e get_mp3_from_url
 
 #Check
-python3 -c "import package_foobar"
+python3 -c "import get_mp3_from_url"
 
-# Consider running package_foobar with -h to check
+# Consider running get_mp3_from_url with -h to check
 # that it runs correctly after installation
-# package_foobar -h
+get_mp3_from_url -h
