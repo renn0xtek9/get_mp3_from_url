@@ -34,7 +34,7 @@ YT_DL_OPTIONS = {
     "ignoreerrors": False,  # Ignore errors during extraction
     "skip_download": False,  # Skip downloading if extraction fails
     "youtube_include_dash_manifest": False,  # Do not include DASH manifests (if possible)
-    "verbose": True,
+    "verbose": False,
     "format": "bestaudio/best",
     "postprocessors": [
         {
