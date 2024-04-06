@@ -2,10 +2,25 @@
 
 import logging
 from pathlib import Path
+from typing import Dict
 
 import yt_dlp
 
 logging.basicConfig(level=logging.INFO)
+
+
+def delete_webp_hook(info_dict: Dict):
+    """Delete ".webp" files after post-processing (audio extraction).
+
+    This will be called as a hook by the yt_dlp
+    Args:
+        info_dict (Dict): information dict supplied by yt_dlp
+    """
+    if info_dict["status"] == "finished":
+        file_keys = list(info_dict["info_dict"]["__files_to_move"].keys())
+        webp_file_path = Path(file_keys[0])
+        if webp_file_path.exists():
+            webp_file_path.unlink()
 
 
 YT_DL_OPTIONS = {
@@ -16,16 +31,17 @@ YT_DL_OPTIONS = {
     "noplaylist": True,
     "keepvideo": False,
     "extract_flat": True,
-    "ignoreerrors": True,  # Ignore errors during extraction
-    "skip_download": True,  # Skip downloading if extraction fails
+    "ignoreerrors": False,  # Ignore errors during extraction
+    "skip_download": False,  # Skip downloading if extraction fails
     "youtube_include_dash_manifest": False,  # Do not include DASH manifests (if possible)
-    "verbose": True,
+    "verbose": False,
+    "format": "bestaudio/best",
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",  # Extract audio
             "preferredcodec": "mp3",  # Convert to MP3
-            "preferredquality": "192",  # Preferred quality for MP3
-        }
+            "preferredquality": "320",  # Preferred quality for MP3
+        },
     ],
 }
 
@@ -62,6 +78,9 @@ def download_songs(batch_file_path: Path, destination_folder: Path, already_down
     url_list = [line.rstrip("\n") for line in open(str(batch_file_path), encoding="utf-8")]
 
     with yt_dlp.YoutubeDL(yt_dlp_options) as youtube_downloader:
+        youtube_downloader.add_postprocessor_hook(delete_webp_hook)
         for url in url_list:
             logging.info("Now downloading: %s", url)
-            youtube_downloader.download([url])
+            error_code = youtube_downloader.download([url])
+
+            logging.info(error_code)
