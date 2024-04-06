@@ -10,11 +10,11 @@ jobs:
       - name: install
         run: ./scripts/install.sh
       - name: format python
-        run: black --config pyproject.toml --check ${{ github.workspace }}/package_foobar
+        run: black --config pyproject.toml --check ${{ github.workspace }}/get_mp3_from_url
       - name: pylint
-        run: pylint --load-plugins=pylint.extensions.docparams  ${{ github.workspace }}/package_foobar
+        run: pylint --load-plugins=pylint.extensions.docparams  ${{ github.workspace }}/get_mp3_from_url
       - name: unit-test
-        run: coverage run --source=package_foobar -m unittest discover -v -b -s ${{ github.workspace }}
+        run: coverage run --source=get_mp3_from_url -m unittest discover -v -b -s ${{ github.workspace }}
       - name: test-coverage
         run: coverage report -m --omit="/usr/*,/home/runner/.local/*" --fail-under=100
       - name: test local deployment
