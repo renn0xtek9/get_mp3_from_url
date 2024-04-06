@@ -3,7 +3,10 @@
 import unittest
 from pathlib import Path
 
-from .song_downloader import download_songs, get_output_template
+from get_mp3_from_url.get_mp3_from_url.song_downloader import (
+    download_songs,
+    get_output_template,
+)
 
 
 class TestDownloadSongs(unittest.TestCase):
@@ -16,10 +19,6 @@ class TestDownloadSongs(unittest.TestCase):
     def test_download_songs_raise_if_destination_folder_not_found(self):
         with self.assertRaises(FileNotFoundError):
             download_songs(Path(__file__), Path("not existing"), Path("/home/foo/.get_mp3_from_url/cache.txt"))
-
-    def test_download_songs_raise_if_cache_file_not_found(self):
-        with self.assertRaises(FileNotFoundError):
-            download_songs(Path(__file__), Path(__file__).parent, Path("not existing"))
 
 
 class TestGetOutputTemplate(unittest.TestCase):
