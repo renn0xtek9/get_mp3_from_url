@@ -8,6 +8,28 @@ import yt_dlp
 logging.basicConfig(level=logging.INFO)
 
 
+YT_DL_OPTIONS = {
+    "nooverwrites": True,
+    "download_archive": "",
+    "outtmpl": "",
+    "writethumbnail": True,
+    "noplaylist": True,
+    "keepvideo": False,
+    "extract_flat": True,
+    "ignoreerrors": True,  # Ignore errors during extraction
+    "skip_download": True,  # Skip downloading if extraction fails
+    "youtube_include_dash_manifest": False,  # Do not include DASH manifests (if possible)
+    "verbose": True,
+    "postprocessors": [
+        {
+            "key": "FFmpegExtractAudio",  # Extract audio
+            "preferredcodec": "mp3",  # Convert to MP3
+            "preferredquality": "192",  # Preferred quality for MP3
+        }
+    ],
+}
+
+
 def get_output_template(destination_folder: Path) -> str:
     """Create output template of youtube-dl being given the destination folder.
 
@@ -32,24 +54,14 @@ def download_songs(batch_file_path: Path, destination_folder: Path, already_down
     if not already_downloaded_list_file_path.exists():
         logging.warning("Cache file not found %s. Will create one", str(already_downloaded_list_file_path))
 
-    youtube_downloader_options = {
-        "nooverwrites": True,
-        "download_archive": str(already_downloaded_list_file_path),
-        "outtmpl": get_output_template(destination_folder),
-        "writethumbnail": True,
-        "noplaylist": True,
-        "keepvideo": True,
-        "extract_flat": True,
-        "ignoreerrors": True,  # Ignore errors during extraction
-        "skip_download": True,  # Skip downloading if extraction fails
-        "youtube_include_dash_manifest": False,  # Do not include DASH manifests (if possible)
-        "verbose": True,
-    }
+    yt_dlp_options = YT_DL_OPTIONS
+    yt_dlp_options["download_archive"] = str(already_downloaded_list_file_path)
+    yt_dlp_options["outtmpl"] = get_output_template(destination_folder)
 
     # pylint: disable=(consider-using-with)
     url_list = [line.rstrip("\n") for line in open(str(batch_file_path), encoding="utf-8")]
 
-    with yt_dlp.YoutubeDL(youtube_downloader_options) as youtube_downloader:
+    with yt_dlp.YoutubeDL(yt_dlp_options) as youtube_downloader:
         for url in url_list:
             logging.info("Now downloading: %s", url)
             youtube_downloader.download([url])
