@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, mock_open, patch
 
 from get_mp3_from_url.get_mp3_from_url.song_downloader import (
     YT_DL_OPTIONS,
+    delete_webp_hook,
     download_songs,
     get_output_template,
 )
@@ -67,3 +68,17 @@ class TestGetOutputTemplate(unittest.TestCase):
         destination_path = Path(Path.home() / "Downloads" / "mp3_from_url")
         expected_template = str(destination_path) + "/%(title)s.%(ext)s"
         self.assertEqual(expected_template, get_output_template(destination_path))
+
+
+class TestDeleteWebpHook(unittest.TestCase):
+    @patch("get_mp3_from_url.get_mp3_from_url.song_downloader.Path.exists")
+    @patch("get_mp3_from_url.get_mp3_from_url.song_downloader.Path.unlink")
+    def test_delete_webp_hook(self, mock_unlink, mock_exists):
+
+        mock_exists.return_value = True
+        mock_unlink.return_value = None
+
+        delete_webp_hook({"status": "finished", "info_dict": {"__files_to_move": {"webp_file_path": "dummy_path"}}})
+
+        mock_exists.assert_called_once_with()
+        mock_unlink.assert_called_once_with()
